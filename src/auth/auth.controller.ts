@@ -9,11 +9,8 @@ export class AuthController {
     @UseGuards(AuthGuard('local'))
     @Post('login')
     async login(@Req() req: any) {
-        const data = this.authService.login(req.user);
-
-        return {
-            message: 'Logged in successfully',
-            data
-        }
+        
+        return this.authService.login(req.user);
+   
     }
 }

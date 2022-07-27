@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create.user.dto';
 import { UpdateUserDto } from './dto/update.user.dto';
 import { User } from './user.entity';
+const bcrypt = require('bcrypt');
 
 @Injectable()
 export class UserService {
@@ -12,7 +13,10 @@ export class UserService {
   ) {}
 
   async create(data: CreateUserDto) {
-    return this.userRepository.save(data) 
+    return this.userRepository.save({
+      ...data,
+      password: bcrypt.hashSync(data.password, 10)
+    });
   }
 
   async findAll(){

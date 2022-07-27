@@ -1,6 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Unique, Index, BeforeInsert, DeleteDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Unique, Index, BeforeInsert, DeleteDateColumn, BaseEntity } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { hashSync } from 'bcrypt';
 
 export enum Role {
     SUPERADMIN = "superadmin",
@@ -11,7 +10,7 @@ export enum Role {
 
 @Entity()
 @Unique(["username", "email"])
-export class User {
+export class User extends BaseEntity {
   @ApiProperty({ description: 'User ID', example: 1 })
   @PrimaryGeneratedColumn()
   id: number;
@@ -49,11 +48,5 @@ export class User {
   @ApiProperty({ description: 'Data de exclusão' })
   @DeleteDateColumn()
   deletedAt: string;
-
-  @BeforeInsert()
-  hashPassword() {
-    this.password = hashSync(this.password, 10);
-    return this;
-  }
 
 }
