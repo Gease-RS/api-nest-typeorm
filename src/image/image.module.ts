@@ -1,16 +1,15 @@
 import { Module } from '@nestjs/common';
+import { ImageController } from './image.controller';
 import { DatabaseModule } from '../database/database.module';
 import { providersRepository } from '../database/typeorm.providers';
-import { UserController } from './user.controller';
-import { UserService } from './user.service';
-
+import { ImageService } from './image.service';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [UserController],
+  controllers: [ImageController],
   providers: [
     ...providersRepository,
-    UserService
-  ],
+    ImageService
+  ]
 })
-export class UserModule {}
+export class ImageModule {}

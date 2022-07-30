@@ -40,23 +40,38 @@ $ nest new api-nest-typeorm
 
 ### 3. Instalando pacotes
 ```bash
-$ npm install typeorm reflect-metadata pg mysql2 class-validador class-transformer bcryptjs
+$ npm install typeorm reflect-metadata pg mysql2 class-validador class-transformer bcryptjs @nestjs/config
 ```
 
-### 4. Pacote para criptografia 
+### 4. Config Root env
+```bash
+$ npm i --save @nestjs/config
+
+app.module.ts
+import { ConfigModule } from '@nestjs/config';
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+
+@Module({
+  imports: [ConfigModule.forRoot()],
+})
+export class AppModule {}
+```
+
+### 5. Pacote para criptografia 
 ```bash
 $ npm i bcrypt
 $ npm i -D @types/bcrypt
 ```
 
-### 5. Instalando Swagger 
+### 6. Instalando Swagger 
 ```bash
 $ npm i --save @nestjs/swagger
 
 http://localhost:3333/api
 ```
 
-### 6. Autenticação
+### 7. Autenticação
 ```bash
 $ npm install --save @nestjs/passport passport passport-local
 $ npm install --save-dev @types/passport-local
@@ -67,6 +82,12 @@ $ npm install --save-dev @types/passport-jwt
 $ nest g module auth
 $ nest g service auth
 $ nest g controller auth
+```
+
+### 8. Upload
+```bash
+$ npm i -D @types/multer
+$ npm i uuid file-type
 ```
 
 ## Rodando projeto

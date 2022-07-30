@@ -1,16 +1,15 @@
 import { Module } from '@nestjs/common';
+import { ProfileService } from './profile.service';
+import { ProfileController } from './profile.controller';
 import { DatabaseModule } from '../database/database.module';
 import { providersRepository } from '../database/typeorm.providers';
-import { UserController } from './user.controller';
-import { UserService } from './user.service';
-
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [UserController],
+  controllers: [ProfileController],
   providers: [
     ...providersRepository,
-    UserService
-  ],
+    ProfileService
+  ]
 })
-export class UserModule {}
+export class ProfileModule {}

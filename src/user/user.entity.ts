@@ -1,15 +1,30 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Unique, Index, BeforeInsert, DeleteDateColumn, BaseEntity } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Unique,
+  Index,
+  DeleteDateColumn,
+  BaseEntity,
+  OneToOne,
+  OneToMany,
+  JoinColumn,
+} from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import Profile from '../profile/profile.entity';
+import Image from '../image/image.entity';
 
 export enum Role {
-    SUPERADMIN = "superadmin",
-    ADMIN = "admin",
-    USER = "user",
-    ASSISTENT = "assistente",
-  }
+  SUPERADMIN = 'superadmin',
+  ADMIN = 'admin',
+  USER = 'user',
+  ASSISTENT = 'assistente',
+}
 
 @Entity()
-@Unique(["username", "email"])
+@Unique(['username', 'email'])
 export class User extends BaseEntity {
   @ApiProperty({ description: 'User ID', example: 1 })
   @PrimaryGeneratedColumn()
@@ -20,7 +35,7 @@ export class User extends BaseEntity {
   @Column({ length: 100 })
   username: string;
 
-  @ApiProperty({ description: 'E-mail'})
+  @ApiProperty({ description: 'E-mail' })
   @Index()
   @Column({ length: 100 })
   email: string;
@@ -31,7 +46,7 @@ export class User extends BaseEntity {
 
   @ApiProperty({ description: 'Tipo de usuário', example: 'assistente' })
   @Column({
-    type: "enum",
+    type: 'enum',
     enum: Role,
     default: Role.USER,
   })
@@ -48,5 +63,14 @@ export class User extends BaseEntity {
   @ApiProperty({ description: 'Data de exclusão' })
   @DeleteDateColumn()
   deletedAt: string;
+
+  @ApiProperty({ description: 'Perfil' })
+  @OneToOne(() => Profile, profile => profile.user)
+  profile: Profile;
+
+  @ApiProperty({ description: 'Foto de perfil' })
+  @OneToMany(() => Image, (images) => images.user)
+  @JoinColumn()
+  images: Image[];
 
 }

@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, ForbiddenException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create.user.dto';
 import { UpdateUserDto } from './dto/update.user.dto';
@@ -13,14 +13,40 @@ export class UserService {
   ) {}
 
   async create(data: CreateUserDto) {
-    return this.userRepository.save({
-      ...data,
-      password: bcrypt.hashSync(data.password, 10)
-    });
+    const email = await this.userRepository.findOneBy({email: data.email});
+    const usernameExists = await this.userRepository.findOneBy({username: data.username});
+
+    if(email) {
+      throw new Error('Este email já existe. Faça o login!');
+    }
+
+    if(usernameExists) {
+      throw new Error('Este usuário já existe. Escolha outro!');
+    }
+    
+    const newUser = await this.userRepository.create(
+      {
+        ...data,
+        password: await bcrypt.hash(data.password, 10),
+      }
+    );
+
+    await this.userRepository.save(newUser);
+
+    return {
+      username: newUser.username,
+      email: newUser.email,
+      role: newUser.role,
+      message: 'Usuário criado com sucesso!'
+    }
   }
 
   async findAll(){
-    return this.userRepository.find();
+    return this.userRepository.find(
+      {
+        relations: ['images']
+      }
+    );
   }
 
   async findOneById(id: number) {
@@ -38,7 +64,14 @@ export class UserService {
   }
 
   async destroy(id: number) {
-    await this.userRepository.findOneByOrFail({id});
-    return this.userRepository.softDelete(id);
+    const user = await this.userRepository.findOneByOrFail({id});
+
+    if (!user) {
+      throw new ForbiddenException('User does not exist');
+    }
+
+    await this.userRepository.softDelete(id);
+
+    return { message: 'Usuário deletado com Sucesso!' };
   }
 }

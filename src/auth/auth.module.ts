@@ -6,10 +6,10 @@ import { AuthController } from './auth.controller';
 import { LocalStrategy } from './strategies/local.strategy';
 import { UserModule } from '../user/user.module';
 import { DatabaseModule } from '../database/database.module';
-import { userProviders } from '../database/typeorm.providers';
 import { UserService } from '../user/user.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { jwtConstants } from './constants';
+import { providersRepository } from '../database/typeorm.providers';
 
 @Module({
   imports: [
@@ -18,11 +18,11 @@ import { jwtConstants } from './constants';
     PassportModule,
     JwtModule.register({
         secret: jwtConstants.secret,
-        signOptions: { expiresIn: '60s' },
+        signOptions: { expiresIn: '7d' },
       }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, ...userProviders,
+  providers: [AuthService, LocalStrategy, ...providersRepository,
     UserService, JwtStrategy],
 })
 export class AuthModule {}

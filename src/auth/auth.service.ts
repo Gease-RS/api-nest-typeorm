@@ -18,7 +18,8 @@ export class AuthService {
           sub: user.id,
         };
         return {
-          access_token: this.jwtService.sign(payload),
+          messsage: 'Logado com sucesso!',
+          access_token: this.jwtService.sign(payload)
         };
       }
     
