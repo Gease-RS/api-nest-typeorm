@@ -13,16 +13,6 @@ export class ProfileController {
   async create(@Body() createProfileDto: CreateProfileDto) {
     return this.profileService.create(createProfileDto);
   }
-
-  @Post('upload')
-  @UseInterceptors(FileInterceptor('url', saveImageStorage))
-  upload(@UploadedFile() file: Express.Multer.File) {
-    if (!file) {
-      throw new Error('Anexe uma imagem');
-    } else {
-      console
-    }
-  }
   
   @Get('listar')
   findAll() {
@@ -39,8 +29,4 @@ export class ProfileController {
     return this.profileService.update(id, updateProfileDto);
   }
 
-  @Delete(':id')
-  destroy(@Param('id') id: number) {
-    return this.profileService.destroy(id);
-  }
 }

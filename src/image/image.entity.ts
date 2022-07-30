@@ -29,10 +29,7 @@ export default class Image  extends BaseEntity{
     userId: number;
 
     @ApiProperty({ description: 'Relations Images' })
-    @ManyToOne(() => User, (user) => user.images, { 
-        cascade: true,
-        eager: true
-    })
+    @ManyToOne(() => User, (user) => user.images)
     @JoinColumn({ name: 'userId' })
     user: User
 

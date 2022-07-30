@@ -27,7 +27,7 @@ export class UserService {
     const newUser = await this.userRepository.create(
       {
         ...data,
-        password: await bcrypt.hash(data.password, 10),
+        password: await bcrypt.hash(data.password, 10)
       }
     );
 
@@ -44,7 +44,8 @@ export class UserService {
   async findAll(){
     return this.userRepository.find(
       {
-        relations: ['images']
+        relations: ['images'],
+        select: ['id', 'username', 'email', 'role', 'images']
       }
     );
   }

@@ -72,5 +72,4 @@ export class User extends BaseEntity {
   @OneToMany(() => Image, (images) => images.user)
   @JoinColumn()
   images: Image[];
-
 }

@@ -5,6 +5,7 @@ import Image from './image.entity';
 
 @Injectable()
 export class ImageService {
+  
   constructor(
     @Inject('IMAGE_REPOSITORY')
     private imageRepository: Repository<Image>,
@@ -23,22 +24,12 @@ export class ImageService {
     return await this.imageRepository.save(avatar);
   }
 
-  async getAllImages(): Promise<Image[]> {
-    return this.imageRepository.find({
-      relations: ['user'],  
-      order: {
-        createdAt: 'DESC',
-      },
-    });
+ async findAllImageUser(userId: number) {
+    return await this.imageRepository.findOneBy({ userId });
   }
  
-  async deleteImage(userId: number, id: number): Promise<{ message: string }> {
-    const image = await this.imageRepository.findOne({
-      where: {
-        id,
-        userId,
-      },
-    });
+  async deleteImage(id: number): Promise<{ message: string }> {
+    const image = await this.imageRepository.findOneBy({ id });
 
     if (!image) {
       throw new BadRequestException('Image not found.');
@@ -46,11 +37,13 @@ export class ImageService {
 
     await this.imageRepository.delete(id);
 
-    return { message: 'Imagem deletada com Sucesso!' };
+    return await { message: 'Image deletada com Sucesso!' };
   }
 
-  async findAll() {
-    return await this.imageRepository.find();
+  async update(file: Express.Multer.File, id: number) {
+    const image = await this.imageRepository.findOneBy({ id });
+    image.url = file.path;
+    return await this.imageRepository.save(image);
   }
 
   async destroy(id: number) {

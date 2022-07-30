@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { FileHelper } from '../helpers/file.helper';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import Profile from './profile.entity';
@@ -27,10 +26,4 @@ export class ProfileService {
   async update(id: number, updateProfileDto: UpdateProfileDto) {
     return await this.profileRepository.update(id, updateProfileDto);
   }
-
-  async destroy(id: number) {
-    await this.profileRepository.findOneBy({ id });
-    return await this.profileRepository.delete(id);
-  }
-
 }

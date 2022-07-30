@@ -13,7 +13,7 @@ import { ImageModule } from './image/image.module';
     UserModule,
     AuthModule,
     ProfileModule,
-    ImageModule
+    ImageModule,
   ],
   controllers: [AppController],
   providers: [AppService],

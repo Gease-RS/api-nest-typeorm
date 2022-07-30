@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, UseInterceptors, UploadedFile, Res, Req, ResponseDecoratorOptions, BadRequestException, createParamDecorator, ExecutionContext, ForbiddenException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseInterceptors, UploadedFile, Res, Req, ResponseDecoratorOptions, BadRequestException, createParamDecorator, ExecutionContext, ForbiddenException, Patch } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { saveImageStorage } from '../helpers/image.storage';
@@ -39,34 +39,33 @@ export class ImageController {
     res.sendFile(filename, { root: './upload/avatar' });
   }
 
-  //getAllImages
-  @Get('listar')
-  async getAllImages() {
-    return await this.imageService.findAll();
+  @Get(':userId')
+  async findAllImageUser(
+    @Param('userId') id: number,
+  ) {
+    return await this.imageService.findAllImageUser(id);
   }
+
+//image/:id
+@Patch(':id')
+  @UseInterceptors(
+    FileInterceptor('url', saveImageStorage))
+    updateAvatar(
+      @Param('id') id: number,
+      @UploadedFile() file: Express.Multer.File,
+      ) {
+    if (!file) {
+      throw new Error('Anexe uma imagem');
+    } else {    
+      return this.imageService.update(file, id)
+    }
+  }
+  
   //deleteImage
-  @Delete('delete/:id')
-  async deleteImage(@Param('id') id: number) {
-    return await this.imageService.destroy(id);
-  }
-
-  /*
-
-  @Patch(':id/update')
-  update(@Param('id') id: number, @Body() updateImageDto: UpdateImageDto) {
-    return this.imageService.update(id, updateImageDto);
-  }
-  
-  
-
-  @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.imageService.findOneBy(id);
-  }
-  
   @Delete(':id')
-  destroy(@Param('id') id: number) {
-    return this.imageService.destroy(id);
+  async deleteImage(
+    @Param('id') id: number,
+  ) {
+    return await this.imageService.deleteImage(id);
   }
-  */
 }

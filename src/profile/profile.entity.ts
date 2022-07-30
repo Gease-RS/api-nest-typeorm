@@ -6,10 +6,8 @@ import {
     Column, 
     OneToOne,
     BaseEntity,
-    OneToMany
 } from "typeorm"
 import { User } from "../user/user.entity";
-import Image from "../image/image.entity";
 
 @Entity('profiles')
 export default class Profile  extends BaseEntity{

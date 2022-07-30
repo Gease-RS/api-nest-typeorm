@@ -26,7 +26,7 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-### 1. Instalando Nest de forma global
+### 1. Instalando Nestjs de forma global
 
 ```bash
 $ npm i -g @nestjs/cli

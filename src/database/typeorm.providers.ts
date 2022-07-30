@@ -18,6 +18,6 @@ export const providersRepository = [
     provide: 'IMAGE_REPOSITORY',
     useFactory: (dataSource: DataSource) => dataSource.getRepository(Image),
     inject: ['DATA_SOURCE'],
-  },
+  }
 ];
 
